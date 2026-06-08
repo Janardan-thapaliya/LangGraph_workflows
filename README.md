@@ -2,7 +2,10 @@
 
 Hands-on notebooks exploring how to build, structure, and orchestrate LangGraph `StateGraph` pipelines — from simple sequential chains to parallel fan-out, conditional branching, iterative loops, and stateful chatbots.
 
+Langgraph Workflow:
 [![Open LangGraph_workflows In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Janardan-thapaliya/LangGraph_workflows/blob/main/LangGraph_workflows.ipynb)
+
+ChatBot Workflow:
 [![Open ChatBot_Workflow In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Janardan-thapaliya/LangGraph_workflows/blob/main/ChatBot_Workflow.ipynb)
 
 ---
@@ -44,7 +47,8 @@ START → calculate_bmi → label_bmi → END
 - `calculate_bmi` computes `bmi = weight / height²`
 - `label_bmi` classifies into Underweight / Normal / Overweight / Obese
 
-> 📸 *Place graph image here — run `g.get_graph().draw_mermaid_png()` in the notebook and save the output.*
+<img width="182" height="372" alt="image" src="https://github.com/user-attachments/assets/4ff28019-9e4f-4353-89c0-b4f5df082e56" />
+
 
 ---
 
@@ -59,7 +63,7 @@ START → llm_qa → END
 - **State:** `question`, `answer`
 - `llm_qa` reads `question` from state, invokes the LLM, writes `answer` back
 
-> 📸 *Place graph image here.*
+<img width="120" height="265" alt="image" src="https://github.com/user-attachments/assets/027831ae-c094-4b41-a316-38d3fe856300" />
 
 ---
 
@@ -76,7 +80,7 @@ START → get_outline → gen_blog → score_blog → END
 - `gen_blog` — writes the full blog post from the outline
 - `score_blog` — rates the blog quality (1–10, integer) against the outline
 
-> 📸 *Place graph image here.*
+<img width="141" height="478" alt="image" src="https://github.com/user-attachments/assets/d90ed2af-54a8-4f1a-8968-a335631be91d" />
 
 ---
 
@@ -96,41 +100,38 @@ START → input → calc_sr  ─┐
 - `calc_bpf` — boundary frequency
 - All three run in parallel; `display` aggregates and prints the stats
 
-> 📸 *Place graph image here.*
+<img width="560" height="372" alt="image" src="https://github.com/user-attachments/assets/5739edad-3b4f-4379-b386-19a48ea8d411" />
 
 ---
 
-### 5. Conditional Workflow — Grade Classifier
+### 5. Conditional Workflow — Review Handling
 
 Routes execution to different nodes based on a condition evaluated at runtime.
 
-```
-START → grade → router ──→ pass_message → END
-                       └──→ fail_message → END
-```
 
-- **State:** `score`, `grade`, `message`
-- `grade` converts numeric score to letter grade (A / B / C / D / F)
-- `router` uses `add_conditional_edges` to branch on pass/fail
 
-> 📸 *Place graph image here.*
+- **State:** `review`, `sentiment`, `diagnosis`, `reply`
+- Get review as Input --> Find sentiment of the review using LLM
+- If positive (+ve) --> Reply thanks and appreciation message
+- If negative (-ve) --> Run diagnosis --> Use diagnosis result to create suitable reply
+Diagnosis will have structured: issue_type, tone, urgency
+
+<img width="367" height="478" alt="image" src="https://github.com/user-attachments/assets/cc91cce9-358b-41d5-be10-c64c78812eb3" />
 
 ---
 
-### 6. Iterative Workflow — Countdown Loop
+### 6. Iterative Workflow — Funny tweet writer for X
 
 Demonstrates a loop that repeatedly invokes a node until a termination condition is met.
 
-```
-START → countdown → should_continue? ──→ countdown (loop)
-                                    └──→ END
-```
+- **State:** `topic`, `tweet`, `evaluation`, `evaluator_feedback`, `iteration`, `max_iteration`, `tweet_history`, `feedback_history`
+- The task is to automate funny and original tweet for X platform.
+- The topic will be provided.
+- The generator will use it to generate tweet --> passed to evaluator to check quality.
+- Condition will be checked if the quality is good enough --> If good, used for posting so END
+- If bad, it will be iteratively Optimized until it passes the quality check
 
-- **State:** `count`
-- Loop continues while `count > 0`, decrementing each iteration
-- Uses `add_conditional_edges` with a router function to decide loop vs. exit
-
-> 📸 *Place graph image here.*
+<img width="372" height="408" alt="image" src="https://github.com/user-attachments/assets/f3bef589-0f58-4cca-9e6e-80a95f354930" />
 
 ---
 
@@ -146,8 +147,9 @@ START → chatbot → END  (invoked repeatedly, state persists across turns)
 - Each call appends the new human message, runs the LLM over the full history, and appends the AI response
 - **Memory** is handled automatically by `MessagesState`; no manual message management needed
 - Uses `ChatOpenAI` as the underlying LLM
+- Tool calling capability is also used for limited task
 
-> 📸 *Place a screenshot of a multi-turn conversation here to show memory in action.*
+<img width="251" height="276" alt="image" src="https://github.com/user-attachments/assets/beb65976-ed92-4e6e-adec-e2205bb0364d" />
 
 ---
 
