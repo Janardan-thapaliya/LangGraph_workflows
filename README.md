@@ -2,11 +2,9 @@
 
 Hands-on notebooks exploring how to build, structure, and orchestrate LangGraph `StateGraph` pipelines — from simple sequential chains to parallel fan-out, conditional branching, iterative loops, and stateful chatbots.
 
-Langgraph Workflow:
-[![Open LangGraph_workflows In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Janardan-thapaliya/LangGraph_workflows/blob/main/LangGraph_workflows.ipynb)
+Langgraph Workflow: [![Open LangGraph_workflows In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Janardan-thapaliya/LangGraph_workflows/blob/main/LangGraph_workflows.ipynb)
 
-ChatBot Workflow:
-[![Open ChatBot_Workflow In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Janardan-thapaliya/LangGraph_workflows/blob/main/ChatBot_Workflow.ipynb)
+ChatBot Workflow: [![Open ChatBot_Workflow In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Janardan-thapaliya/LangGraph_workflows/blob/main/ChatBot_Workflow.ipynb)
 
 ---
 
@@ -35,45 +33,9 @@ StateGraph(MyState)
 
 Covers the four fundamental workflow patterns, each demonstrated with a self-contained example.
 
-### 1. Sequential Workflow — BMI Calculator
-
-The simplest pattern: nodes execute one after another in a straight chain.
-
-```
-START → calculate_bmi → label_bmi → END
-```
-
-- **State:** `weight_kg`, `height_m`, `bmi`, `category`
-- `calculate_bmi` computes `bmi = weight / height²`
-- `label_bmi` classifies into Underweight / Normal / Overweight / Obese
-
-<img width="182" height="372" alt="image" src="https://github.com/user-attachments/assets/4ff28019-9e4f-4353-89c0-b4f5df082e56" />
-
-
----
-
-### 2. LLM Workflow — Single-Node QA
-
-Wires a `ChatOpenAI` call directly into the graph as a single node.
-
-```
-START → llm_qa → END
-```
-
-- **State:** `question`, `answer`
-- `llm_qa` reads `question` from state, invokes the LLM, writes `answer` back
-
-<img width="120" height="265" alt="image" src="https://github.com/user-attachments/assets/027831ae-c094-4b41-a316-38d3fe856300" />
-
----
-
-### 3. Prompt Chaining — Blog Generator
+### 1. Sequential Workflow — Blog Generator (prompt chained)
 
 Decomposes a task into a sequence of LLM calls, each building on the previous output.
-
-```
-START → get_outline → gen_blog → score_blog → END
-```
 
 - **State:** `topic`, `outline`, `answer`, `score`
 - `get_outline` — generates a structured outline for the given topic
@@ -84,15 +46,9 @@ START → get_outline → gen_blog → score_blog → END
 
 ---
 
-### 4. Parallel Workflow — Cricket Stats
+### 2. Parallel Workflow — Cricket Stats
 
 Fans out from a single node into multiple independent branches that execute concurrently, then merges results.
-
-```
-START → input → calc_sr  ─┐
-                calc_bpb ─┤→ display → END
-                calc_bpf ─┘
-```
 
 - **State:** `runs`, `balls`, `fours`, `sixes`, `sr`, `bpb`, `bpf`
 - `calc_sr` — strike rate = `(runs / balls) * 100`
@@ -104,11 +60,9 @@ START → input → calc_sr  ─┐
 
 ---
 
-### 5. Conditional Workflow — Review Handling
+### 3. Conditional Workflow — Review Handling
 
 Routes execution to different nodes based on a condition evaluated at runtime.
-
-
 
 - **State:** `review`, `sentiment`, `diagnosis`, `reply`
 - Get review as Input --> Find sentiment of the review using LLM
@@ -120,7 +74,7 @@ Diagnosis will have structured: issue_type, tone, urgency
 
 ---
 
-### 6. Iterative Workflow — Funny tweet writer for X
+### 4. Iterative Workflow — Funny tweet writer for X
 
 Demonstrates a loop that repeatedly invokes a node until a termination condition is met.
 
